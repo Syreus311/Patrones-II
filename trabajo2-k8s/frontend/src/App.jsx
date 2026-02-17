@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-const API_BASE =
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+
   import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
 export default function App() {
@@ -18,9 +19,8 @@ export default function App() {
   }
 
   useEffect(() => {
-  setItems([{ id: 1, value: "demo", created_at: new Date().toISOString() }]);
-}, []);
-
+    loadItems().catch((e) => setErr(e.message));
+  }, []);
 
   async function handleAdd() {
     setLoading(true);
