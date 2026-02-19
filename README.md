@@ -15,9 +15,10 @@ cd backend
 npm install
 
 npm start
-# 4. Frontend (instalar y correr)
+# 4. Frontend (en otra terminal)
 
-# 5. En otra terminal
+cd trabajo2-k8s
+
 cd frontend
 
 npm install
