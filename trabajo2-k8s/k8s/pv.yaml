@@ -4,9 +4,9 @@ metadata:
   name: postgres-pv
 spec:
   capacity:
-    storage: 1Gi
+    storage: 1Gi # Capacidad máxima del volumen
   accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
+    - ReadWriteOnce # Solo un nodo puede montarlo en modo lectura/escritura
+  persistentVolumeReclaimPolicy: Retain # Si el PVC se elimina, los datos NO se borran automáticamente
   hostPath:
     path: /data/postgres

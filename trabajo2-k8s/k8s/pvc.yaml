@@ -4,7 +4,7 @@ metadata:
   name: postgres-pvc
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteOnce # Debe coincidir con el accessMode del PV
   resources:
     requests:
       storage: 1Gi

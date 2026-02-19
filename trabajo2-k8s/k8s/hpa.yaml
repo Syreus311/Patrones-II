@@ -15,4 +15,6 @@ spec:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 70
+          averageUtilization: 80
+
+# Requests lo vamos a calcular con el promedio de las peticiones por minuto.

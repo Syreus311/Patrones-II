@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 
-const API_BASE = "";
+const API_BASE = ""; // Vacío porque se usan rutas relativas
 
 export default function App() {
-  const [value, setValue] = useState("");
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState("");
+  const [value, setValue] = useState(""); // Valor actual del input
+  const [items, setItems] = useState([]); // Lista de elementos obtenidos
+  const [loading, setLoading] = useState(false); // Estado para mostrar indicador de carga
+  const [err, setErr] = useState(""); // Errores
 
-  async function loadItems() {
+  async function loadItems() { // Función para cargar los items
     setErr("");
     const res = await fetch(`${API_BASE}/items`);
     if (!res.ok) throw new Error("Error cargando items");
@@ -16,11 +16,11 @@ export default function App() {
     setItems(data);
   }
 
-  useEffect(() => {
+  useEffect(() => { // Cargar los datos iniciales
     loadItems().catch((e) => setErr(e.message));
   }, []);
 
-  async function handleAdd() {
+  async function handleAdd() { // Función para agregar nuevo item
     setLoading(true);
     setErr("");
     try {
@@ -42,7 +42,7 @@ export default function App() {
     }
   }
 
-  return (
+  return ( // HTML
     <div style={{ fontFamily: "system-ui", maxWidth: 700, margin: "40px auto", padding: 16 }}>
       <h2>Trabajo II - App</h2>
 
