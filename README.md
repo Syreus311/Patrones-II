@@ -1,30 +1,28 @@
+**Nombres:** Katherin Juliana Moreno Carvajal, Mariana Salas Gutiérrez
+
+# Pasos para abrir la aplicación
+
 # 1. Clonar y entrar al proyecto:
 
-git clone <URL_DE_TU_REPO>
+git clone https://github.com/Syreus311/Patrones-II.git
 
 cd trabajo2-k8s
 
-# 2. Levantar PostgreSQL con Docker
-docker compose up -d
+# 2. Iniciar Minikube
+minikube start
 
-docker ps
+# 3. Instalar componente metrics-server
+minikube addons enable metrics-server
 
-# 3. Backend (instalar y correr)
-cd backend
+# 4. Conectar Docker al de Minikube
+minikube -p minikube docker-env --shell powershell | Invoke-Expression
 
-npm install
+# 5. Construir backend y frontend
+docker build -t backend-image ./backend
+docker build -t frontend-image ./frontend
 
-npm start
-# 4. Frontend (en otra terminal)
+# 6. Aplicar Kubernetes
+kubectl apply -f k8s/
 
-cd trabajo2-k8s
-
-cd frontend
-
-npm install
-
-npm run dev
-
-Nota importante para PowerShell (Windows)
-Si curl -X POST ... falla en PowerShell, usar:
-Invoke-RestMethod -Method Post -Uri "http://localhost:3000/items" -ContentType "application/json" -Body '{"value":"hola"}'
+# 7. Abrir aplicación
+minikube service frontend-service
