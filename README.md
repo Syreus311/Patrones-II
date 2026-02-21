@@ -10,11 +10,9 @@ cd trabajo2-k8s
 
 **1.2. Iniciar Minikube**
 
-
 minikube start
 
 **1.3. Instalar componente metrics-server**
-
 
 minikube addons enable metrics-server
 
@@ -44,7 +42,7 @@ minikube service frontend-service
 
 # 2. Video de funcionamiento
 
-[texto del enlace](URL)
+[https://www.canva.com/design/DAHB7MIpz5Y/I4EAHdRcg1DDsjQhNYSr4g/watch?utm_content=DAHB7MIpz5Y&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h8ffd482d22](https://www.canva.com/design/DAHB7MIpz5Y/I4EAHdRcg1DDsjQhNYSr4g/watch?utm_content=DAHB7MIpz5Y&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h8ffd482d22)
 
 # 3. Arquitectura implementada
 
@@ -85,6 +83,20 @@ De acuerdo con [1], PV es una pieza de almacenamiento en el clúster que ha sido
 Continuando con [1], PVC es una solicitud de almacenamiento por parte de un usuario que consumen recursos de PVs. En este caso, se solicita 1Gi de almacenamiento con el modo de acceso ReadWriteOnce, permitiendo que Kubernetes realice el enlace automático con un PersistentVolume compatible. Este claim es posteriormente montado en el contenedor de PostgreSQL, asegurando que los datos se almacenen en un volumen persistente. El Deployment de PostgreSQL monta el PVC en */var/lib/postgresql/data*.
 
 # 5. Definición de recursos
+
+**5.1. Estimación de recursos**
+
+Teniendo en cuenta que se pueden tener 5 usuarios concurrentes promedio, con picos de hasta 30 usuarios, los recursos se definieron de la siguiente manera:
+
+* **Request:** 
+    * 477m de CPU
+    * 40Mi de memoria
+    
+* **Limits:** 
+    * 1431m de CPU
+    * 120Mi de memoria
+
+**5.2.** 
 
 # 6. Evidencia de pruebas
 
