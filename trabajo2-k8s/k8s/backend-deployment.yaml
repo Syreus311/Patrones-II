@@ -29,10 +29,11 @@ spec:
 
           resources:
             requests:
-              cpu: "200m"
-              memory: "256Mi"
+              cpu: "477m"
+              memory: "40Mi"
             limits:
-              memory: "768Mi"
+              cpu: "1431m"
+              memory: "120Mi"
 
           readinessProbe: # Verifica si la aplicación está lista para recibir tráfico
             httpGet:

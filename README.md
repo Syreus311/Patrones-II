@@ -9,27 +9,38 @@ git clone https://github.com/Syreus311/Patrones-II.git
 cd trabajo2-k8s
 
 **1.2. Iniciar Minikube**
+
 minikube start
 
 **1.3. Instalar componente metrics-server**
+
 minikube addons enable metrics-server
 
 **1.4. Conectar Docker al de Minikube**
+
 minikube -p minikube docker-env --shell powershell | Invoke-Expression
 
 **1.5. Construir backend y frontend**
+
 docker build -t backend-image ./backend
 docker build -t frontend-image ./frontend
 
 **1.6. Aplicar Kubernetes**
-kubectl apply -f k8s/
 
-**1.7. Abrir aplicación**
+kubectl apply -f k8s/
+kubectl get pods
+
+**1.7. En caso de tener problemas con el backend al iniciar**
+
+kubectl rollout restart deployment backend
+
+**1.8. Abrir aplicación**
+
 minikube service frontend-service
 
 # 2. Video de funcionamiento
 
-
+[texto del enlace](URL)
 
 # 3. Arquitectura implementada
 
@@ -73,18 +84,30 @@ Continuando con [1], PVC es una solicitud de almacenamiento por parte de un usua
 
 # 6. Evidencia de pruebas
 
-# 7. Preguntas
+# 7. Preguntas (Resumen)
 
-## 7.1. ¿Cómo configuro el HPA?
+**7.1. ¿Cómo configuro el HPA?**
 
-## 7.2. ¿Cuántos recursos asigno a la API?
+El Horizontal Pod Autoscaler (HPA) se configuró utilizando la versión autoscaling/v2 de Kubernetes, con el objetivo de escalar automáticamente el número de réplicas del Deployment del backend en función del consumo de CPU. El archivo en el que se realizó la configuración es *hpa.yaml*.
 
-## 7.3. ¿Cuántos instancias necesito para 5 usuarios concurrentes?
+Las características principales son:
 
-## 7.4. ¿Cuántos instancias necesito para 40 usuarios concurrentes?
+* **minReplicas:** 2 (Garantiza que siempre existan al menos dos instancias del backend para asegurar alta disponibilidad).
+* **maxReplicas:** 6 (Establece el límite máximo de escalamiento).
+* **averageUtilization:** 80 indica que el HPA escalará cuando el uso promedio de CPU supere el 80% del valor definido en los requests del Deployment.
+
+**7.2. ¿Cuántos recursos asigno a la API?**
+
+En *request*, se asignaron 477m de CPU y 40Mi de memoria. Por otra parte, en *limits* se asignaron 1431m de CPU y 120Mi de memoria (el triple de los request). Esto se hizo de acuerdo a las pruebas de carga realizadas con JMeter.
+
+**7.3. ¿Cuántos instancias necesito para 5 usuarios concurrentes?**
+
+Se necesitan 2 instancias para 5 usuarios concurrentes.
+
+**7.4. ¿Cuántos instancias necesito para 30 usuarios concurrentes?**
+
+Se necesitan 3 instancias para 30 usuarios concurrentes.
 
 # Referencias
 
-https://kubernetes.io/es/docs/concepts/storage/persistent-volumes/
-
-https://home.robusta.dev/blog/stop-using-cpu-limits
+[1] Kubernetes. (s. f.). Volúmenes persistentes. Kubernetes. Recuperado el 20 de febrero de 2026, de https://kubernetes.io/es/docs/concepts/storage/persistent-volumes/
