@@ -64,15 +64,17 @@ El modelo C1 presenta el contexto general del sistema y muestra cómo interactú
 El modelo C2 muestra la arquitectura interna del sistema, mostrando los contenedores que lo componen y cómo interactúan entre sí dentro del clúster Kubernetes. Como elementos principales se tienen:
 
 * **Frontend:** Presenta la interfaz de usuario, consume la API REST del backend mediante solicitudes HTTP y muestra la lista de valores almacenados.
-* **Backend:** Expone endpoints HTTP (GET y POST), procesa solicitudes y se comunica con la base de datos PostgreSQL.
+* **Backend:** Expone endpoints HTTP (GET y POST), procesa solicitudes y se comunica con la base de datos PostgreSQL. Según los requisitos del proyecto, el endpoint POST debía incluir un doble ciclo for del 1 al 1000 con el fin de generar carga de CPU y permitir evaluar el comportamiento del HPA.
 * **Horizontal Pod Autoscaler (HPA):** Ajusta automáticamente el número de réplicas en función del uso de CPU.
 * **Base de datos:** Almacena la información de forma persistente y ejecuta consultas SQL enviadas por el backend. Garantiza la persistencia mediante el uso de PersistentVolume (PV) y PersistentVolumeClaim (PVC).
+
+Es importante mencionar que, la API fue diseñada siguiendo los principios de la arquitectura REST (Representational State Transfer), ya que en los endpoints GET /items y POST /items se emplean correctamente los métodos HTTP. Por ejemplo, el método GET /items permite recuperar la colección de recursos almacenados en la base de datos, mientras que POST /items permite crear un nuevo recurso. Adicionalmente, se implementa el endpoint GET /health como mecanismo de verificación del estado del servicio para Kubernetes. La API también utiliza códigos de estado HTTP adecuados, como 200 OK para solicitudes exitosas, 400 Bad Request cuando fallan las validaciones del cliente y 500 Internal Server Error ante errores del servidor.
 
 ![C2](trabajo2-k8s/images/Trabajo_2__C2.png)
 
 # 4. Estrategia de persistencia
 
-La estrategia de persistencia implementada tiene como objetivo garantizar que la información almacenada en la base de datos PostgreSQL no se pierda por reinicios del pod, fallos del contenedor o cambios en del clúster Kubernetes. Para lograrlo, se utiliza PersistentVolume (PV) y PersistentVolumeClaim (PVC). 
+La estrategia de persistencia implementada tiene como objetivo garantizar que la información almacenada en la base de datos PostgreSQL no se pierda por reinicios del pod, fallos del contenedor o cambios en el clúster Kubernetes. Para lograrlo, se utiliza PersistentVolume (PV) y PersistentVolumeClaim (PVC). 
 
 **4.1. PersistentVolume**
 
@@ -80,7 +82,11 @@ De acuerdo con [1], PV es una pieza de almacenamiento en el clúster que ha sido
 
 **4.2. PersistentVolumeClaim**
 
-Continuando con [1], PVC es una solicitud de almacenamiento por parte de un usuario que consumen recursos de PVs. En este caso, se solicita 1Gi de almacenamiento con el modo de acceso ReadWriteOnce, permitiendo que Kubernetes realice el enlace automático con un PersistentVolume compatible. Este claim es posteriormente montado en el contenedor de PostgreSQL, asegurando que los datos se almacenen en un volumen persistente. El Deployment de PostgreSQL monta el PVC en */var/lib/postgresql/data*.
+Continuando con [1], PVC es una solicitud de almacenamiento por parte de un usuario que consumen recursos de PV. En este caso, se solicita 1Gi de almacenamiento con el modo de acceso ReadWriteOnce, permitiendo que Kubernetes realice el enlace automático con un PersistentVolume compatible. Este claim es posteriormente montado en el contenedor de PostgreSQL, asegurando que los datos se almacenen en un volumen persistente. El Deployment de PostgreSQL monta el PVC en */var/lib/postgresql/data*.
+
+**4.3. ConfigMap y Secrets**
+
+Para cumplir con las buenas prácticas de Kubernetes y los requisitos del proyecto, se implementaron ConfigMaps y Secrets para desacoplar la configuración y credenciales del código fuente. Entonces, se utilizó *configmap.yaml* para almacenar variables de configuración no sensibles, como DB_HOST, DB_PORT y DB_NAME. Por otra parte, se usó *secret.yaml* para almacenar credenciales sensibles como DB_USER y DB_PASSWORD.
 
 # 5. Definición de recursos
 
@@ -178,13 +184,13 @@ Las características principales son:
 
 **7.2. ¿Cuántos recursos asigno a la API?**
 
-En *request*, se asignaron 477m de CPU y 40Mi de memoria. Por otra parte, en *limits* se asignaron 1431m de CPU y 120Mi de memoria (el triple de los request). Esto se hizo de acuerdo a las pruebas de carga realizadas con JMeter.
+En *request*, se asignaron 477m de CPU y 40Mi de memoria. Por otra parte, en *limits* se asignaron 1431m de CPU y 120Mi de memoria, el triple del valor definido en *requests*. Esto se hizo de acuerdo a las pruebas de carga realizadas con JMeter.
 
-**7.3. ¿Cuántos instancias necesito para 5 usuarios concurrentes?**
+**7.3. ¿Cuántas instancias necesito para 5 usuarios concurrentes?**
 
 Se necesitan 2 instancias para 5 usuarios concurrentes.
 
-**7.4. ¿Cuántos instancias necesito para 30 usuarios concurrentes?**
+**7.4. ¿Cuántas instancias necesito para 30 usuarios concurrentes?**
 
 Se necesitan 3 instancias para 30 usuarios concurrentes.
 
