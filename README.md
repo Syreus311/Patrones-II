@@ -20,19 +20,18 @@ minikube addons enable metrics-server
 
 **1.4. Conectar Docker al de Minikube**
 
-
 minikube -p minikube docker-env --shell powershell | Invoke-Expression
 
 **1.5. Construir backend y frontend**
 
-
 docker build -t backend-image ./backend
+
 docker build -t frontend-image ./frontend
 
 **1.6. Aplicar Kubernetes**
 
-
 kubectl apply -f k8s/
+
 kubectl get pods
 
 **1.7. En caso de tener problemas con el backend al iniciar**
@@ -99,7 +98,7 @@ Las características principales son:
 
 * **minReplicas:** 2 (Garantiza que siempre existan al menos dos instancias del backend para asegurar alta disponibilidad).
 * **maxReplicas:** 6 (Establece el límite máximo de escalamiento).
-* **averageUtilization:** 80 indica que el HPA escalará cuando el uso promedio de CPU supere el 80% del valor definido en los requests del Deployment.
+* **averageUtilization:** 80 (Indica que el HPA escalará cuando el uso promedio de CPU supere el 80% del valor definido en los requests del Deployment).
 
 **7.2. ¿Cuántos recursos asigno a la API?**
 
