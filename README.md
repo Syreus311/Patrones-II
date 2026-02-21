@@ -158,11 +158,11 @@ Es importante destacar que el número máximo de réplicas configurado en el HPA
 
 *Página*
 
-![Página](trabajo2-k8s/images/prueba3_pagina.jpg)
+![Página](trabajo2-k8s/images/prueba3_pagina.png)
 
 *Logs de resultados*
 
-![Logs](trabajo2-k8s/images/prueba3_log.jpg)
+![Logs](trabajo2-k8s/images/prueba3_log.png)
 
 # 7. Preguntas (Resumen)
 
