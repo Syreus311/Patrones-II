@@ -124,11 +124,45 @@ Es importante destacar que el número máximo de réplicas configurado en el HPA
 
 # 6. Evidencia de pruebas
 
-**6.1. Prueba 1** 
+**6.1. Prueba 1: Inicial** 
 
-**6.2. Prueba 2** 
+*JMeter*
 
-**6.3. Prueba 2** 
+![JMeter](trabajo2-k8s/images/prueba1_jmeter.jpg)
+
+*Logs de resultados*
+
+![Logs](trabajo2-k8s/images/prueba1_log.jpg)
+
+**6.2. Prueba 2: 5 usuarios concurrentes** 
+
+*JMeter*
+
+![JMeter](trabajo2-k8s/images/prueba2_jmeter.jpg)
+![JMeter](trabajo2-k8s/images/prueba2_jmeter2.jpg)
+
+*Página*
+
+![Página](trabajo2-k8s/images/prueba2_pagina.jpg)
+
+*Logs de resultados*
+
+![Logs](trabajo2-k8s/images/prueba2_log.jpg)
+
+**6.3. Prueba 3: 30 usuarios concurrentes** 
+
+*JMeter*
+
+![JMeter](trabajo2-k8s/images/prueba3_jmeter.jpg)
+![JMeter](trabajo2-k8s/images/prueba3_jmeter2.jpg)
+
+*Página*
+
+![Página](trabajo2-k8s/images/prueba3_pagina.jpg)
+
+*Logs de resultados*
+
+![Logs](trabajo2-k8s/images/prueba3_log.jpg)
 
 # 7. Preguntas (Resumen)
 
