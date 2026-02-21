@@ -10,22 +10,27 @@ cd trabajo2-k8s
 
 **1.2. Iniciar Minikube**
 
+
 minikube start
 
 **1.3. Instalar componente metrics-server**
+
 
 minikube addons enable metrics-server
 
 **1.4. Conectar Docker al de Minikube**
 
+
 minikube -p minikube docker-env --shell powershell | Invoke-Expression
 
 **1.5. Construir backend y frontend**
+
 
 docker build -t backend-image ./backend
 docker build -t frontend-image ./frontend
 
 **1.6. Aplicar Kubernetes**
+
 
 kubectl apply -f k8s/
 kubectl get pods
