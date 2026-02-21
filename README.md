@@ -96,9 +96,39 @@ Teniendo en cuenta que se pueden tener 5 usuarios concurrentes promedio, con pic
     * 1431m de CPU
     * 120Mi de memoria
 
-**5.2.** 
+**5.2. Deployment del backend** 
+
+Los recursos se definieron como se ve a continuación en el archivo *backend-deployment.yaml*:
+
+```backend-deployment.yaml
+    resources:
+        requests:
+            cpu: "477m"
+            memory: "40Mi"
+        limits:
+            cpu: "1431m"
+            memory: "120Mi"
+```
+
+**5.3. Justificación** 
+
+La asignación de recursos para la API se definió con base en pruebas de carga realizadas utilizando Apache JMeter, con el objetivo de simular múltiples usuarios concurrentes y analizar el comportamiento del sistema bajo ciertas condiciones.
+
+Inicialmente, se configuró un escenario con 30 usuarios concurrentes, considerado el pico máximo de usuarios según el enunciado del proyecto. Después de un minuto de ejecución, se observó que los pods del backend alcanzaron consumos de 496m y 457m de CPU, respectivamente, mientras que el uso de memoria llegó aproximadamente a 38Mi en ambos casos. Con base en estos resultados, los valores de *requests* se calcularon tomando como referencia el consumo promedio observado durante el minuto de prueba. Posteriormente, los *limits* se definieron como tres veces el valor de los requests.
+
+En la segunda prueba, se aplicaron los recursos previamente calculados y se ejecutó un nuevo escenario de carga con 5 usuarios concurrentes (number of threads) y un ramp-up period de 5 segundos. Tras un minuto de ejecución, el sistema mantuvo 2 réplicas activas, registrando consumos de 338m y 328m de CPU, y 37Mi de memoria en ambos pods. En este escenario, la utilización de CPU se encontraba alrededor del 68% respecto al umbral configurado del 80% en el HPA, lo que confirma que la configuración permite operar de manera estable sin necesidad de escalar innecesariamente.
+
+Finalmente, con el objetivo de validar que la configuración de recursos y el HPA funcionaran correctamente bajo el escenario de carga máxima, se realizó una nueva prueba utilizando 30 usuarios concurrentes (number of threads) y un ramp-up period de 20 segundos. Transcurrido un minuto de ejecución, el sistema escaló automáticamente a 3 réplicas activas, evidenciando el correcto funcionamiento del Horizontal Pod Autoscaler. Los consumos de CPU registrados fueron 446m, 384m y 473m, respectivamente, mientras que el uso de memoria se mantuvo estable en aproximadamente 37Mi, 40Mi y 37Mi.
+
+Es importante destacar que el número máximo de réplicas configurado en el HPA era 6, y no fue necesario alcanzarlo. Esto demuestra que la configuración definida permite manejar el pico de 30 usuarios concurrentes de manera eficiente, manteniendo un uso equilibrado de CPU y memoria sin generar sobreescalamiento. En conclusión, las pruebas confirman que la asignación de recursos y la política de escalamiento automático permiten soportar el escenario de carga máxima previsto.
 
 # 6. Evidencia de pruebas
+
+**6.1. Prueba 1** 
+
+**6.2. Prueba 2** 
+
+**6.3. Prueba 2** 
 
 # 7. Preguntas (Resumen)
 
